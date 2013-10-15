@@ -8,7 +8,7 @@ setup
 =====
 
 Create sensu-config.js in the root directory. Eventually, this will be a saner config file,
-but for now it's a regularly js file
+but for now it's an exported js object.
 
     (function(exports){
 
@@ -51,7 +51,7 @@ Then you can kick of the grunt dev server:
 
     grunt server
     
-Soon, I'll fix proxy.js to forward needed routes to backbone so that we can build something useful in production:
+Soon, I'll fix proxy.js to forward needed routes to backbone so that we can run this in production:
 
     grunt build
     node proxy.js # but this doesn't forward the needed routes to backbone, yet
