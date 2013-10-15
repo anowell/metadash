@@ -1,0 +1,17 @@
+<% _.each(events, function(event) { %>
+  <div class="list-group-item {{event.statusName}} event">
+    <div class="row">
+      <div class="client col col-md-3">{{event.client}}</div>
+      <div class="check col col-md-3">{{event.check}}</div>
+      <div class="output col col-md-6">{{event.output}}</div>
+    </div>
+  </div>
+<% }); %>
+
+<% if(events.length === 0) { %>
+  <div class="list-group-item unknown event">
+    <div class="row">
+      <div class="col col-md-12">Nothing to see here, for now.</div>
+    </div>
+  </div>
+<% } %>

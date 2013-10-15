@@ -1,0 +1,18 @@
+<ul class="nav nav-tabs">
+  <% _.each(links, function(link) { %>
+    <li 
+      <% if(link.query===query) { %>class = "active"<% }; %>>
+      <a href="events{{link.query}}">{{link.label}}</a>
+    </li>
+  <% }); %>
+</ul>
+
+<% _.each(servers, function(server) { %>
+  <div class="server-group list-group" id="server-group-{{server.slug}}">
+    <div class="list-group-item event-list-heading">
+      <span class="sync-status">{{server.lastSync}}</span>
+      <a href="//{{server.host}}:8080">{{server.slug}}</a>
+    </div>
+    <div class="events-list" id="events-{{server.slug}}"></div>
+  </div>
+<% }); %>

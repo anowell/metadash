@@ -1,0 +1,77 @@
+$iconSpritePath: '/images/glyphicons-halflings.png';
+@import 'sass-bootstrap/lib/bootstrap';
+
+.container {
+  max-width: 100%;
+}
+
+.col {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event {
+  .client {
+    font-weight: bold;
+  }
+  .check {
+  }
+  .output {
+    font-family: Courier New, monospace;
+  }
+}
+
+.server-group {
+  margin-top: 20px;
+}
+
+.event-list-heading {
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.sync-status {
+  float:right;
+}
+
+.event {
+  border: none;
+}
+
+.critical {
+  background-color: #f4c8c5;
+  color: #9d261d;
+  &:hover {
+    background-color: #9d261d;
+    color: #fff;
+  }
+}
+
+.warning {
+  background-color: #fee9cc;
+  color: #f89406;
+  &:hover {
+    background-color: #f89406;
+    color: #fff;
+  }
+}
+
+.unknown {
+  background-color: #eee;
+  color: #999;
+  &:hover {
+    background-color: #999;
+    color: #fff;    
+  }
+}
+
+.ok {
+  background: #dff0d8;
+  color: #468847;
+  &:hover {
+    background-color: #468847;
+    color: #fff
+  }
+}
