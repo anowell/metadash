@@ -2,9 +2,6 @@
   "name": "MetaDash",
   "version": "0.0.2",
   "dependencies": {
-    "http-proxy": "~0.10.3",
-    "connect": "~2.8.5",
-    "connect-modrewrite": "~0.5.9"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -29,7 +26,8 @@
     "load-grunt-tasks": "~0.1.0",
     "connect-livereload": "~0.2.0",
     "time-grunt": "~0.1.1",
-    "grunt-connect-proxy": "~0.1.6"
+    "grunt-connect-proxy": "~0.1.6",
+    "connect-modrewrite": "~0.5.9"
   },
   "engines": {
     "node": ">=0.8.0"

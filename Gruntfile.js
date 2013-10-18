@@ -14,12 +14,12 @@ var mrwSnippet = modRewrite([
 
 // This basically gets proxy.js functionality to work in grunt with livereload
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-var sensu = require('./sensu-config.js')
+var sensu = require('./config.js')
 var sensuProxies = []
 for (var i=0; i<sensu.servers.length; i++) {
     var server = sensu.servers[i]
     var options = {}
-    options = { 
+    options = {
         context: '/' + server.slug,
         host: server.host,
         port: 4567,
@@ -54,6 +54,10 @@ module.exports = function (grunt) {
             coffeeTest: {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
+            },
+            config: {
+                files: ['config.js'],
+                tasks: ['copy:tmp']
             },
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -254,8 +258,8 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     dot: true,
-                    dest: '.tmp',
-                    src: [ 'sensu-config.js' ]
+                    dest: '.tmp/scripts',
+                    src: [ 'config.js' ]
                 }]
             },
             dist: {
@@ -268,6 +272,12 @@ module.exports = function (grunt) {
                         '*.{ico,txt}',
                         'images/{,*/}*.{webp,gif}'
                     ]
+                },
+                {
+                    expand: true,
+                    dot: true,
+                    dest: '<%= yeoman.dist %>/scripts',
+                    src: [ 'config.js' ]
                 }]
             }
         },
@@ -280,8 +290,8 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     namespace: "MetaDash.JST",
-                    processName: function(filename) { 
-                        return filename.match(/templates\/(.*)\.html$/)[1] 
+                    processName: function(filename) {
+                        return filename.match(/templates\/(.*)\.html$/)[1]
                     },
                     templateSettings: {
                         escape :      /\{\{\{([\s\S]+?)\}\}\}/g,
