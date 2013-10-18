@@ -14,19 +14,25 @@ var mrwSnippet = modRewrite([
 
 // This basically gets proxy.js functionality to work in grunt with livereload
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-var sensu = require('./config.js')
-var sensuProxies = []
-for (var i=0; i<sensu.servers.length; i++) {
-    var server = sensu.servers[i]
-    var options = {}
-    options = {
-        context: '/' + server.slug,
-        host: server.host,
-        port: 4567,
-        rewrite: {}
+var getProxies = function() {
+    var sensuProxies = []
+    var fs = require('fs')
+    if(fs.existsSync('./config.js')) {
+        var sensu = require('./config.js')
+        for (var i=0; i<sensu.servers.length; i++) {
+            var server = sensu.servers[i]
+            var options = {}
+            options = {
+                context: '/' + server.slug,
+                host: server.host,
+                port: 4567,
+                rewrite: {}
+            }
+            options.rewrite['^/'+server.slug] = ''
+            sensuProxies.push(options)
+        }
     }
-    options.rewrite['^/'+server.slug] = ''
-    sensuProxies.push(options)
+    return sensuProxies
 }
 
 module.exports = function (grunt) {
@@ -87,7 +93,7 @@ module.exports = function (grunt) {
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: 'localhost'
             },
-            proxies: sensuProxies,
+            proxies: getProxies(),
             livereload: {
                 options: {
                     middleware: function (connect) {
