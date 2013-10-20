@@ -230,6 +230,9 @@ module.exports = function (grunt) {
         },
         cssmin: {
             dist: {
+                options: {
+                    keepSpecialComments: 0
+                },
                 files: {
                     '<%= yeoman.dist %>/styles/main.css': [
                         '.tmp/styles/{,*/}*.css',
