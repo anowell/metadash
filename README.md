@@ -1,7 +1,11 @@
 metadash
 ========
 
-A meta-dashboard for aggregating other dashboards, currently to merge multiple sensu servers into a single dashboard
+A meta-dashboard for aggregating other dashboards, currently to merge multiple sensu servers into a single dashboard.
+
+Here's a sample screenshot, but be warned, much of the functionality is incomplete (i.e. the entire top navbar)
+
+![ScreenShot](https://dl.dropboxusercontent.com/u/39033486/metadash-screenshot.png)
 
 
 setup
