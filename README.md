@@ -52,6 +52,10 @@ Create config.js in the root directory. For better or worse, this is currently a
 
 Test the config with grunt dev server:
 
+    npm install grunt-cli -g
+    npm install bower -g
+    npm install
+    bower install
     grunt server
     
 Or to build a production release to the dist folder:
