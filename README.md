@@ -7,8 +7,7 @@ A meta-dashboard for aggregating other dashboards, currently to merge multiple s
 setup
 =====
 
-Create sensu-config.js in the root directory. Eventually, this will be a saner config file,
-but for now it's an exported js object.
+Create config.js in the root directory. For better or worse, this is currently an exported js object.
 
     (function(exports){
 
@@ -47,12 +46,36 @@ but for now it's an exported js object.
 
     })(typeof exports === 'undefined'? this.sensu={}: exports);
 
-Then you can kick of the grunt dev server:
+Test the config with grunt dev server:
 
     grunt server
     
-Soon, I'll fix proxy.js to forward needed routes to backbone so that we can run this in production:
+Or to build a production release to the dist folder:
 
     grunt build
-    node proxy.js # but this doesn't forward the needed routes to backbone, yet
-    
+
+Build scripts and artifacts are readily available on cloudbees: https://socrata-oss.ci.cloudbees.com/job/metadash/
+
+For production, drop the config.js into the dist directory, 
+and configure a webserver to serve it statically and proxy api requests to sensu-api.
+Here's an example nginx config:
+
+    proxy_cache_path /var/cache/nginx levels=2 keys_zone=SENSU:8m
+                                  max_size=100m inactive=5m;
+    server {
+      listen 80;
+      proxy_cache SENSU;
+      proxy_cache_valid 200 302 20s;
+      proxy_cache_valid 404 10s;
+      location /name1/ {
+         proxy_pass http://sensu1.example.com:4567 %>/;
+      }
+      location /name2/ {
+         proxy_pass http://sensu2.example.com:4567 %>/;
+      }
+      location / {
+        root /path/to/metadash/dist;
+        try_files $uri /index.html;
+      }
+    }
+
