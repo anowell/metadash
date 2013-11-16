@@ -3,35 +3,31 @@
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h4 class="modal-title" id="event-{{event.id}}">{{event.id}}</h4>
+      <h4 class="modal-title">{{event.client}}</h4>
+      <div>{{event.check}}</div>
     </div>
     <div class="modal-body">
-      <div class="panel panel-info">
-        <ul class="list-group">
-          <li class="list-group-item">Status: {{event.statusName}}</li>
-          <li class="list-group-item">Occurrences: {{event.occurrences}}</li>
-          <li class="list-group-item">Flapping: {{event.flapping}}</li>
-          <li class="list-group-item">Issued: {{event.issuedTime}}</li>
-        </ul>
-      </div>
+
 
       <div class="panel panel-info">
-        <div class="panel-heading">Client: {{event.client}}</div>
-        <ul class="list-group">
-          <li class="list-group-item">Address: {{client.address}}</li>
-          <li class="list-group-item">Subscriptions: {{client.subscriptions.join(', ')}}</li>
-        </ul>
+        <div class="panel-body">
+          <div><b>Status:</b> {{event.statusName}}</div>
+          <div><b>Occurrences:</b> {{event.occurrences}}</div>
+          <div><b>Flapping:</b> {{event.flapping}}</div>
+          <div><b>Issued:</b> {{event.issuedTime}}</div>
+          <hr />
+          <div><b>Address:</b> {{client.address}}</div>
+          <div><b>Subscriptions:</b> {{client.subscriptions.join(', ')}}</div>
+          <hr />
+          <div><b>Interval:</b> {{check.interval}} seconds</div>
+          <div><b>Handlers:</b> {{check.handlers.join(', ')}}</div>
+          <div><b>Standalone:</b> {{check.standalone}}</div>
+          <div><b>Subscribers:</b> {{check.subscribers.join(', ')}}</div>
+        </div>
       </div>
 
-      <div class="panel panel-info">
-        <div class="panel-heading">Check: {{event.check}}</div>
-        <ul class="list-group">
-          <li class="list-group-item">Interval: {{check.interval}} seconds</li>
-          <li class="list-group-item">Handlers: {{check.handlers.join(', ')}}</li>
-          <li class="list-group-item">Standalone: {{check.standalone}}</li>
-          <li class="list-group-item">Subscribers: {{check.subscribers.join(', ')}}</li>
-        </ul>
-      </div>
+      <div><pre class="{{event.statusName}}">{{event.output}}</pre></div>
+
     </div>
     <div class="modal-footer">
       <% if(event.silenced) { %>
