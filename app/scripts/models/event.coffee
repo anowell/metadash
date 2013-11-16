@@ -13,9 +13,10 @@ class MetaDash.Models.Event extends MetaDash.Models.SensuBaseModel
   initialize: ->
     @set id: "#{@get("client")}/#{@get("check")}"
     @set
-      client_silence_path: "silence/#{@get("client")}"
-      silence_path: "silence/#{@get("id")}"
-    
+      client_silence_path: "silence/#{@get('client')}"
+      silence_path: "silence/#{@get('id')}"
+      check_silence_path: "silence/all/#{@get('check')}"
+
     @listenTo(@getServer().stashes, "reset", @setSilencing)
     @listenTo(@getServer().stashes, "add", @setSilencing)
     @listenTo(@getServer().stashes, "remove", @setSilencing)
@@ -24,22 +25,50 @@ class MetaDash.Models.Event extends MetaDash.Models.SensuBaseModel
   setSilencing: ->
     check_silenced = false
     client_silenced = false
-    check_silenced = true if @getServer().stashes.get(@get("silence_path"))
+    client_check_silenced = true if @getServer().stashes.get(@get("silence_path"))
+    check_silenced = true if @getServer().stashes.get(@get("check_silence_path"))
     client_silenced = true if @getServer().stashes.get(@get("client_silence_path"))
 
-    if @get("check_silenced") != check_silenced || @get("client_silenced") != client_silenced
+    if @get("client_check_silenced") != client_check_silenced || @get("client_silenced") != client_silenced || @get("check_silenced") != check_silenced
       @set
+        client_check_silenced: client_check_silenced
         check_silenced: check_silenced
         client_silenced: client_silenced
+      @trigger('silencing', this)
 
-  silenced: ->
-    @get("check_silenced") || @get("client_silenced")
+  isSilenced: ->
+    @get("client_check_silenced") || @get("client_silenced") || @get("check_silenced")
 
-  statusName:  ->
+  getStatusName:  ->
     switch @get("status")
       when 1 then "warning"
       when 2 then "critical"
       else "unknown"
+
+  getIssuedTime: ->
+    new Date(@get('issued') * 1000)
+
+  getClient: ->
+    @getServer().clients.findWhere({name: @get('client')})
+
+  getCheck: ->
+    @getServer().checks.findWhere({name: @get('check')})
+
+  # getStashes: ->
+  #   @getServer().stashes.filter( (s) =>
+  #     path = s.get('path')
+  #     path == @get('silence_path') or path == @get('client_silence_path') or path == @get('check_silence_path')
+  #   )
+
+  toJSON: (options) ->
+    json = _.clone(this.attributes)
+
+    if options?.helperAttributes?
+      json.statusName = @getStatusName()
+      json.silenced = @isSilenced()
+      json.issuedTime = @getIssuedTime()
+
+    json
 
   # resolve: (options = {}) =>
   #   @successCallback = options.success
@@ -50,29 +79,34 @@ class MetaDash.Models.Event extends MetaDash.Models.SensuBaseModel
   #     error: (model, xhr, opts) =>
   #       @errorCallback.apply(this, [model, xhr, opts]) if @errorCallback
 
-  # silence: (options = {}) =>
-  #   @successCallback = options.success
-  #   @errorCallback = options.error
-  #   stash = SensuDashboard.Stashes.create({
-  #     path: @get("silence_path")
-  #     content: { timestamp: Math.round(new Date().getTime() / 1000) }}, {
-  #     success: (model, response, opts) =>
-  #       @successCallback.apply(this, [this, response]) if @successCallback
-  #     error: (model, xhr, opts) =>
-  #       @errorCallback.apply(this, [this, xhr, opts]) if @errorCallback})
+  silence: (options = {}) ->
+    @successCallback = options.success
+    @errorCallback = options.error
 
-  # unsilence: (options = {}) =>
-  #   @successCallback = options.success
-  #   @errorCallback = options.error
-  #   stash = SensuDashboard.Stashes.get(@get("silence_path"))
-  #   if stash
-  #     stash.destroy
-  #       success: (model, response, opts) =>
-  #         @successCallback.apply(this, [this, response, opts]) if @successCallback
-  #       error: (model, xhr, opts) =>
-  #         @errorCallback.apply(this, [this, xhr, opts]) if @errorCallback
-  #   else
-  #     @errorCallback.apply(this, [this]) if @errorCallback
+    stash = @getServer().stashes.create({
+      path: @get("silence_path")
+      expire: options?.expire
+      content:
+        timestamp: Math.round(new Date().getTime() / 1000)
+        description: "Silenced by MetaDash" + (if options?.expire then "for #{options.expire/60} minutes." else "indefinitely.")
+      }, {
+      success: (model, response, opts) =>
+        @successCallback.apply(this, [this, response]) if @successCallback
+      error: (model, xhr, opts) =>
+        @errorCallback.apply(this, [this, xhr, opts]) if @errorCallback})
+
+  unsilence: (options = {}) ->
+    @successCallback = options.success
+    @errorCallback = options.error
+    stash = @getServer().stashes.get(@get("silence_path"))
+    if stash
+      stash.destroy
+        success: (model, response, opts) =>
+          @successCallback.apply(this, [this, response, opts]) if @successCallback
+        error: (model, xhr, opts) =>
+          @errorCallback.apply(this, [this, xhr, opts]) if @errorCallback
+    else
+      @errorCallback.apply(this, [this]) if @errorCallback
 
 
 class MetaDash.Collections.Events extends MetaDash.Collections.SensuBaseCollection
@@ -86,5 +120,23 @@ class MetaDash.Collections.Events extends MetaDash.Collections.SensuBaseCollecti
 
   refreshInterval: 30
 
+  queryFilter: (f) ->
+    @.filter (event) =>
+        toArray = (val) ->
+          return val if _.isArray(val)
+          return [val] if _.isString(val)
+          return []
+        anyMatchCheck = (param, check) ->
+          _.any(toArray(param), (p) -> check.match(new RegExp(p)))
+        anyMatchStatus = (param, status) ->
+          _.any(toArray(param), (p) -> parseInt(p) == status)
 
-
+        if f.silenced?
+          return false unless (f.silenced!="0") == event.isSilenced()
+        if f.status?
+          return false unless anyMatchStatus(toArray(f.status), event.get('status'))
+        if f.filter?
+          return false unless anyMatchCheck(toArray(f.filter), event.get('check'))
+        if f.ignore?
+          return false if anyMatchCheck(toArray(f.ignore), event.get('check'))
+        return true

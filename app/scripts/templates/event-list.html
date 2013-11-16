@@ -1,5 +1,5 @@
 <% _.each(events, function(event) { %>
-  <div class="list-group-item {{event.statusName}} event">
+  <div class="list-group-item {{event.statusName}} event" data-id="{{event.id}}">
     <div class="row">
       <div class="client col col-md-3">{{event.client}}</div>
       <div class="check col col-md-3">{{event.check}}</div>

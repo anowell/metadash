@@ -4,16 +4,12 @@ class MetaDash.Models.Stash extends MetaDash.Models.SensuBaseModel
   defaults:
     path: "silence"
     content: {}
+    expire: null
 
   idAttribute: "path"
 
-  # isNew: =>
-  #   !_.contains(SensuDashboard.Stashes.models, this)
-
-  # create: (attributes, options) =>
-  #   options ||= {}
-  #   options.wait = true
-  #   Backbone.create(attributes, options)
+  isNew: ->
+    !@collection?.server?.stashes.findWhere({path: this.get('path')})
 
   # sync: (method, model, options) =>
   #   options ||= {}

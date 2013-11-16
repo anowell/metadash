@@ -12,6 +12,8 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
 }
 
 .event {
+  cursor: pointer;
+
   .client {
     font-weight: bold;
   }
@@ -63,7 +65,7 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
   color: #999;
   &:hover {
     background-color: #999;
-    color: #fff;    
+    color: #fff;
   }
 }
 

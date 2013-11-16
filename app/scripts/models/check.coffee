@@ -7,6 +7,7 @@ class MetaDash.Models.Check extends MetaDash.Models.SensuBaseModel
     subscribers: []
     interval: 60
 
+  idAttribute: "name"
 
 
 class MetaDash.Collections.Checks extends MetaDash.Collections.SensuBaseCollection

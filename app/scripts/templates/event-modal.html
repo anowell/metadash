@@ -1,0 +1,64 @@
+<!-- Modal -->
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="event-{{event.id}}">{{event.id}}</h4>
+    </div>
+    <div class="modal-body">
+      <div class="panel panel-info">
+        <ul class="list-group">
+          <li class="list-group-item">Status: {{event.statusName}}</li>
+          <li class="list-group-item">Occurrences: {{event.occurrences}}</li>
+          <li class="list-group-item">Flapping: {{event.flapping}}</li>
+          <li class="list-group-item">Issued: {{event.issuedTime}}</li>
+        </ul>
+      </div>
+
+      <div class="panel panel-info">
+        <div class="panel-heading">Client: {{event.client}}</div>
+        <ul class="list-group">
+          <li class="list-group-item">Address: {{client.address}}</li>
+          <li class="list-group-item">Subscriptions: {{client.subscriptions.join(', ')}}</li>
+        </ul>
+      </div>
+
+      <div class="panel panel-info">
+        <div class="panel-heading">Check: {{event.check}}</div>
+        <ul class="list-group">
+          <li class="list-group-item">Interval: {{check.interval}} seconds</li>
+          <li class="list-group-item">Handlers: {{check.handlers.join(', ')}}</li>
+          <li class="list-group-item">Standalone: {{check.standalone}}</li>
+          <li class="list-group-item">Subscribers: {{check.subscribers.join(', ')}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <% if(event.silenced) { %>
+        <% if(event.client_check_silenced) { %>
+          <button type="button" class="btn btn-success unsilence">Unsilence</button>
+        <% } %>
+        <% if(event.check_silenced) { %>
+          <button type="button" class="btn btn-success unsilence-check">Unsilence check</button>
+        <% } %>
+        <% if(event.client_silenced) { %>
+          <button type="button" class="btn btn-success unsilence-client">Unsilence client</button>
+        <% } %>
+      <% } else { %>
+        <div class="btn-group">
+          <button type="button" class="btn btn-danger silence" data-expire="1800">Silence (30m)</button>
+          <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" class="silence" data-expire="1800">Silence 30 minutes</a></li>
+            <li><a href="#" class="silence" data-expire="28800">Silence 8 hours</a></li>
+            <li><a href="#" class="silence" data-expire="86400">Silence 24 hours</a></li>
+            <li><a href="#" class="silence" data-expire="604800">Silence 7 days</a></li>
+          </ul>
+        </div>
+      <% } %>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

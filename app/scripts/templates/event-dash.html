@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs">
   <% _.each(links, function(link) { %>
-    <li 
-      <% if(link.query===query) { %>class = "active"<% }; %>>
+    <li
+      <% if(link.query===query) { %>class = "active"<% } %>>
       <a href="events{{link.query}}">{{link.label}}</a>
     </li>
   <% }); %>
