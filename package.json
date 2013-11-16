@@ -1,6 +1,6 @@
 {
   "name": "MetaDash",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
   },
   "devDependencies": {
@@ -19,7 +19,6 @@
     "grunt-contrib-imagemin": "~0.2.0",
     "grunt-contrib-watch": "~0.5.2",
     "grunt-mocha": "~0.4.1",
-    "grunt-bower-requirejs": "~0.7.0",
     "grunt-usemin": "~0.1.10",
     "grunt-rev": "~0.1.0",
     "grunt-open": "~0.2.0",

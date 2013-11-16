@@ -14,15 +14,7 @@ class MetaDash.Views.EventsListView extends Backbone.View
     @collection.on('silencing', this.render, this)
 
   render: ->
-    events = _.map(@collection.queryFilter(@filter), (event) ->
-      {
-        id: event.get('id')
-        client: event.get('client')
-        check: event.get('check')
-        output: event.get('output')
-        statusName: event.getStatusName()
-      }
-    )
+    events = _.map(@collection.queryFilter(@filter), (event) -> event.toJSON({helperAttributes: true}))
     html = @template({ events: events })
     this.$el.html(html);
 

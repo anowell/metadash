@@ -8,7 +8,7 @@ var mountFolder = function (connect, dir) {
 
 var modRewrite = require('connect-modrewrite');
 var mrwSnippet = modRewrite([
-        '!\\.html|\\.js|\\.css|\\.png|\\.ico$ /index.html [L]'
+        '!\\.html|\\.js|\\.css|\\.png|\\.ico|\\.eot|\\.svg|\\.ttf|\\.woff$ /index.html [L]'
     ])
 
 
@@ -188,7 +188,7 @@ module.exports = function (grunt) {
                 cssDir: '.tmp/styles',
                 imagesDir: '<%= yeoman.app %>/images',
                 javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
+                fontsDir: '<%= yeoman.app %>/fonts',
                 importPath: '<%= yeoman.app %>/bower_components',
                 relativeAssets: true
             },
@@ -279,7 +279,8 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>',
                     src: [
                         '*.{ico,txt}',
-                        'images/{,*/}*.{webp,gif}'
+                        'images/{,*/}*.{webp,gif}',
+                        'fonts/{,*/}*.{eot,svg,ttf,woff}'
                     ]
                 },
                 {
@@ -288,11 +289,6 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>/scripts',
                     src: [ 'config.js' ]
                 }]
-            }
-        },
-        bower: {
-            all: {
-                rjsConfig: '<%= yeoman.app %>/scripts/main.js'
             }
         },
         jst: {
