@@ -20,7 +20,8 @@ class MetaDash.Views.EventsListView extends Backbone.View
 
   showDetails: (evt) ->
     event = @collection.findWhere({id: $(evt.currentTarget).data('id')})
-    client = event.getClient()
-    check = event.getCheck()
-    view = MetaDash.VM.create( this, 'EventModal', MetaDash.Views.EventModalView, {event: event, client: client, check: check})
-    view.render()
+    if event
+      client = event.getClient()
+      check = event.getCheck()
+      view = MetaDash.VM.create( this, 'EventModal', MetaDash.Views.EventModalView, {event: event, client: client, check: check})
+      view.render()
