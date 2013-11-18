@@ -31,7 +31,7 @@
     </div>
     <div class="modal-footer">
       <% if(event.silenced) { %>
-        <% if(event.client_check_silenced) { %>
+        <% if(event.event_silenced) { %>
           <button type="button" class="btn btn-success unsilence" data-loading-text="Unsilencing..." >
             <span class="glyphicon glyphicon-volume-up"></span> Unsilence
           </button>
@@ -42,11 +42,27 @@
           </button>
         <% } %>
         <% if(event.client_silenced) { %>
-          <button type="button" class="btn btn-success unsilence-client" data-loading-text="Not implemented...">
+          <button type="button" class="btn btn-success unsilence-client" data-loading-text="Unsilencing...">
             <span class="glyphicon glyphicon-volume-up"></span> Unsilence client
           </button>
         <% } %>
       <% } else { %>
+        <div class="btn-group">
+          <button type="button" class="btn btn-danger silence-client" data-expire="900" data-loading-text="Silencing...">
+            <span class="glyphicon glyphicon-volume-off"></span> Silence client 15 min
+          </button>
+          <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" class="silence-client" data-expire="3600">Silence 1 hour</a></li>
+            <li><a href="#" class="silence-client" data-expire="28800">Silence 8 hours</a></li>
+            <li><a href="#" class="silence-client" data-expire="86400">Silence 24 hours</a></li>
+            <li><a href="#" class="silence-client" data-expire="604800">Silence 7 days</a></li>
+          </ul>
+        </div>
+
         <div class="btn-group">
           <button type="button" class="btn btn-danger silence" data-expire="900" data-loading-text="Silencing...">
             <span class="glyphicon glyphicon-volume-off"></span> Silence 15 min

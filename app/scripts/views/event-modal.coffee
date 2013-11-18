@@ -11,6 +11,7 @@ class MetaDash.Views.EventModalView extends Backbone.View
 
   events:
     "click .silence": "silence"
+    "click .silence-client": "silenceClient"
     "click .unsilence": "unsilence"
     "click .unsilence-check": "unsilenceCheck"
     "click .unsilence-client": "unsilenceClient"
@@ -45,12 +46,12 @@ class MetaDash.Views.EventModalView extends Backbone.View
     @$el.modal("hide")
     super
 
-  silence: (evt) ->
+  silence: (evt, model=@event) ->
     @remove
     btn = $(evt.currentTarget)
     btn.button('loading')
     expire = btn.data('expire')
-    @event.silence(
+    model.silence(
       expire: expire
       success: (model) =>
         @update()
@@ -72,5 +73,6 @@ class MetaDash.Views.EventModalView extends Backbone.View
         console.log("Failed to unsilence #{model.get('id')}")
     )
 
-  unsilenceClient: (evt) -> $(evt.currentTarget).button('loading') #unsilence(evt, @client)
-  unsilenceCheck: (evt) -> $(evt.currentTarget).button('loading')  #unsilence(evt, @check)
+  silenceClient: (evt) -> @silence(evt, @client)
+  unsilenceClient: (evt) -> @unsilence(evt, @client)
+  unsilenceCheck: (evt) -> $(evt.currentTarget).button('loading')  #@unsilence(evt, @check)

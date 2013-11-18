@@ -25,19 +25,19 @@ class MetaDash.Models.Event extends MetaDash.Models.SensuBaseModel
   setSilencing: ->
     check_silenced = false
     client_silenced = false
-    client_check_silenced = true if @getServer().stashes.get(@get("silence_path"))
+    event_silenced = true if @getServer().stashes.get(@get("silence_path"))
     check_silenced = true if @getServer().stashes.get(@get("check_silence_path"))
     client_silenced = true if @getServer().stashes.get(@get("client_silence_path"))
 
-    if @get("client_check_silenced") != client_check_silenced || @get("client_silenced") != client_silenced || @get("check_silenced") != check_silenced
+    if @get("event_silenced") != event_silenced || @get("client_silenced") != client_silenced || @get("check_silenced") != check_silenced
       @set
-        client_check_silenced: client_check_silenced
+        event_silenced: event_silenced
         check_silenced: check_silenced
         client_silenced: client_silenced
       @trigger('silencing', this)
 
   isSilenced: ->
-    @get("client_check_silenced") || @get("client_silenced") || @get("check_silenced")
+    @get("event_silenced") || @get("client_silenced") || @get("check_silenced")
 
   getStatusName:  ->
     switch @get("status")
@@ -89,11 +89,12 @@ class MetaDash.Models.Event extends MetaDash.Models.SensuBaseModel
       content:
         timestamp: Math.round(new Date().getTime() / 1000)
         description: "Silenced by MetaDash" + (if options?.expire then "for #{options.expire/60} minutes." else "indefinitely.")
-      }, {
+    }, {
       success: (model, response, opts) =>
         @successCallback.apply(this, [this, response]) if @successCallback
       error: (model, xhr, opts) =>
-        @errorCallback.apply(this, [this, xhr, opts]) if @errorCallback})
+        @errorCallback.apply(this, [this, xhr, opts]) if @errorCallback
+    })
 
   unsilence: (options = {}) ->
     @successCallback = options.success
