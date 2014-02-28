@@ -8,9 +8,7 @@ class MetaDash.Views.EventsListView extends Backbone.View
 
   initialize: (options)->
     @filter = options.filter
-    @collection.on('add', this.render, this)
-    @collection.on('remove', this.render, this)
-    @collection.on('reset', this.render, this)
+    @collection.on('sync', this.render, this)
     @collection.on('silencing', this.render, this)
 
   render: ->
