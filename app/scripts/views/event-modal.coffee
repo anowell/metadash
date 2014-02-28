@@ -25,7 +25,9 @@ class MetaDash.Views.EventModalView extends Backbone.View
 
     @event.on('change', this.update, this)
     @client.on('change', this.update, this)
-    @check.on('change', this.update, this)
+
+    # Strangely: keepalive doesn't have a check
+    @check?.on('change', this.update, this)
 
   render: ->
     @update()
@@ -33,11 +35,12 @@ class MetaDash.Views.EventModalView extends Backbone.View
     @$el.modal("show")
 
   update: ->
+    console.log(@check?.toJSON() ? (new MetaDash.Models.Check).toJSON())
     html = @template(
       {
-        event: @event?.toJSON({helperAttributes: true}) ? {}
-        client: @client?.toJSON() ? {}
-        check: @check?.toJSON() ? {}
+        event: @event?.toJSON({helperAttributes: true}) ? (new MetaDash.Models.Event).toJSON({helperAttributes: true}),
+        client: @client?.toJSON() ? (new MetaDash.Models.Client).toJSON(),
+        check: @check?.toJSON() ? (new MetaDash.Models.Check).toJSON()
       }
     )
     @$el.html(html);
