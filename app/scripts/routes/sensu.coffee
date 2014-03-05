@@ -4,16 +4,16 @@ class MetaDash.Routers.SensuRouter extends Backbone.Router
   routes:
     "":                     "index"
     "events":               "events"
-#    "clients(/:name)":        "client"
+    "clients(/:name)":        "clients"
 #    "checks(/:name)":         "checks"
 #    "stats":                  "stats"
 
   initialize: ->
     # start watching for hashchange events
-    Backbone.history.start( 
+    Backbone.history.start(
       pushState : true
       root : '/'
-    ) 
+    )
 
   index: ->
     defaultRoute = "events" + (MetaDash.Links?.events[0]?.query ? "")
@@ -27,4 +27,8 @@ class MetaDash.Routers.SensuRouter extends Backbone.Router
 
   check: (name, params) ->
 
-  client: (name, params) ->
+  clients: (name, params) ->
+    filter = params ? {}
+    view = MetaDash.VM.create( {}, 'ClientDash', MetaDash.Views.ClientsDashView, {filter: filter})
+    view.render()
+

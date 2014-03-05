@@ -9,11 +9,20 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
 }
 
-.event {
-  cursor: pointer;
+.checks {
+  overflow: normal;
+  text-overflow: normal;
+  white-space: normal;
+}
 
+.list-group-item {
+  cursor: pointer;
+}
+
+.event-row {
   .client {
     font-weight: bold;
   }
@@ -40,6 +49,15 @@ $iconSpritePath: '/images/glyphicons-halflings.png';
 
 .event {
   border: none;
+}
+
+.client-row {
+  background: #fff;
+  color: #333333;
+  &:hover {
+    background-color: #eee;
+    color: #333333
+  }
 }
 
 .critical {

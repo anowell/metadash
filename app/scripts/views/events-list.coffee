@@ -4,7 +4,7 @@ class MetaDash.Views.EventsListView extends Backbone.View
   template: MetaDash.JST['event-list']
 
   events:
-    "click .event": "showDetails"
+    "click .event-row": "showDetails"
 
   initialize: (options)->
     @filter = options.filter

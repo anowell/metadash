@@ -1,5 +1,5 @@
 <% _.each(events, function(event) { %>
-  <div class="list-group-item {{event.statusName}} event" data-id="{{event.id}}">
+  <div class="list-group-item {{event.statusName}} event-row" data-id="{{event.id}}">
     <div class="row">
       <div class="client col col-md-3">
         <% if(event.client_silenced) { %>
@@ -24,7 +24,7 @@
 <% }); %>
 
 <% if(events.length === 0) { %>
-  <div class="list-group-item unknown event">
+  <div class="list-group-item unknown event-row">
     <div class="row">
       <div class="col col-md-12">Nothing to see here, for now.</div>
     </div>
