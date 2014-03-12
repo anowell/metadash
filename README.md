@@ -46,7 +46,25 @@ Create config.js in the root directory. For better or worse, this is currently a
                     label: 'Everything',
                     query: ''
                 }
-            ]
+            ],
+            clients : [
+                {
+                    label: 'Load Balancers',
+                    query: '?filter=load_balancers'
+                },
+                {
+                    label: 'Frontends',
+                    query: '?filter=frontend'
+                },
+                {
+                     label: 'DB Servers',
+                     query: '?filter=postgres|cassandra'
+                },
+                {
+                    label: 'Everything',
+                    query: ''
+                }
+            ]            
         }
 
     })(typeof exports === 'undefined'? this.sensu={}: exports);
